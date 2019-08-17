@@ -5,6 +5,8 @@ import click
 from copy import deepcopy
 from pathlib import Path
 
+from report.html import generate_report_html
+
 PYRAMID_TESTS = ("ut", "it")
 
 
@@ -59,7 +61,7 @@ class TestReport:
                 count_type[key] += report[key]
 
         report = {"total_tags": total_tags}
-        report.update(count_type)
+        report["count_for_type"] = [list(i) for i in count_type.items()]
         return report
 
     def get_tests_tags(self):
@@ -82,12 +84,15 @@ class TestReport:
                         break
 
                 tags.append(tag_search)
-            tags_names = [i.pop("original_name") for i in tags]
+            tags_names = [i.pop("original_name", "").replace("# #", "")
+                          for i in tags]
             count_tags = self.count_tags_for_path(tags_names)
             tags_dict.update({"total_tags": len(tags),
                               "path": path, "tags": tags,
-                              "tag_names": tags_names,
-                              "count_tags": count_tags})
+                              "tag_names": set(tags_names),
+                              "count_tags": count_tags,
+                              "filename": test.name,
+                              "filepath": str(test.parent)})
             tags_file.append(tags_dict)
 
         report = self.consolidate_data(tags_file)
@@ -98,7 +103,7 @@ class TestReport:
 @click.command()
 @click.option('-p', '--project_path', help='The project path of tests',
               required=True)
-@click.option('-f', '--format', default="json", help='The format of output')
+@click.option('-f', '--format', default="html", help='The format of output')
 def report_tag(**kwargs):
     """Execute the report for files."""
 
@@ -109,7 +114,7 @@ def report_tag(**kwargs):
         with open("report.json", "w") as report:
             report.write(json.dumps(test_tags))
     else:
-        pass
+        generate_report_html(**test_tags)
 
     click.echo("Generate repor with success")
 

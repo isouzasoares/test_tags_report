@@ -7,20 +7,13 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v3.8.5">
-    <title>Pricing example · Bootstrap</title>
+    <title>Pytest report</title>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
       google.charts.load("current", {packages:["corechart"]});
       google.charts.setOnLoadCallback(drawChart);
       function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Task', 'Hours per Day'],
-          ['Work',     11],
-          ['Eat',      2],
-          ['Commute',  2],
-          ['Watch TV', 2],
-          ['Sleep',    7]
-        ]);
+        var data = google.visualization.arrayToDataTable([['Task', 'Hours per Day'], {% for i in report.count_for_type %} {{ i | safe }}, {% endfor %}]);
 
         var options = {
           title: 'Pyramid Tests',
@@ -48,6 +41,9 @@
         -ms-user-select: none;
         user-select: none;
       }
+      caption {
+        caption-side: top;
+      }
 
       @media (min-width: 768px) {
         .bd-placeholder-img-lg {
@@ -60,8 +56,8 @@
   </head>
   <body>
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-  <h5 class="my-0 mr-md-auto font-weight-normal">Pytest Report</h5>
-</div>
+      <h5 class="my-0 mr-md-auto font-weight-normal">Pytest Report</h5>
+    </div>
 
 
 <div class="container">
@@ -69,34 +65,31 @@
        <div id="piechart_3d" style="width: 900px; height: 500px;"></div>
  </div>
  <div class="d-flex justify-content-center">
-     <table class="table">
+     <table class="table table-striped">
+        <caption>Report details</caption>
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
+            <th scope="col">Filename</th>
+            <th scope="col">Total tags</th>
+            <th scope="col">Tag names (distinct)</th>
+            <th scope="col">Total Ut</th>
+            <th scope="col">Total It</th>
+            
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>@twitter</td>
-          </tr>
+
+          {% for detail in details_paths %}
+            <tr>
+              <th scope="row">{{ loop.index }}</th>
+              <td>{{ detail.filename }}</td>
+              <td>{{ detail.total_tags }}</td>
+              <td>{% for tag in detail.tag_names %} {{ tag }}<br/> {% endfor %}</td>
+              <td>{{ detail.ut }}</td>
+              <td>{{ detail.it }}</td>
+            </tr>
+          {% endfor %}
         </tbody>
      </table>
  </div>
