@@ -72,7 +72,7 @@
             <th scope="col">#</th>
             <th scope="col">Filename</th>
             <th scope="col">Total tags</th>
-            <th scope="col">Tag names (distinct)</th>
+            <th scope="col">Tags - total</th>
             <th scope="col">Total Ut</th>
             <th scope="col">Total It</th>
             
@@ -85,7 +85,7 @@
               <th scope="row">{{ loop.index }}</th>
               <td>{{ detail.filename }}</td>
               <td>{{ detail.total_tags }}</td>
-              <td>{% for tag in detail.tag_names %} {{ tag }}<br/> {% endfor %}</td>
+              <td>{% for tag_count in detail.count_tags %} {{ tag_count.name }} - <b>{{ tag_count.count }}</b><br/>{% endfor %}</td>
               <td>{{ detail.ut }}</td>
               <td>{{ detail.it }}</td>
             </tr>
