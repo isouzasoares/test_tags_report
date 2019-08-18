@@ -52,15 +52,16 @@ class TestReport:
 
     def consolidate_data(self, path_data):
 
-        total_tags = 0
+        total_tags = total_defs = 0
         count_type = deepcopy(self.pyramide_tests)
 
         for report in path_data:
             total_tags += report["total_tags"]
+            total_defs += report["total_defs"]
             for key in count_type.keys():
                 count_type[key] += report[key]
 
-        report = {"total_tags": total_tags}
+        report = {"total_tags": total_tags, "total_defs": total_defs}
         report["count_for_type"] = [list(i) for i in count_type.items()]
         return report
 
