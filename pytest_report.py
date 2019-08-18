@@ -64,16 +64,28 @@ class TestReport:
         report["count_for_type"] = [list(i) for i in count_type.items()]
         return report
 
-    def get_tests_tags(self):
+    def get_test_tags(self, text):
+
+        pattern = r"\# \#test_\w+::\w{2}"
+        find = re.findall(pattern, text)
+        return find
+
+    def get_test_def(self, text):
+
+        pattern = r"def test_\w+"
+        find = re.findall(pattern, text)
+        return [i.replace("def ", "") for i in find]
+
+    def get_report(self):
 
         tags_file = []
-        pattern = r"\# \#test_\w+::\w{2}"
         for test in self.tests_paths:
             tags = []
             tags_dict = deepcopy(self.pyramide_tests)
             test_text = test.read_text()
-            find = re.findall(pattern, test_text)
+            find = self.get_test_tags(test_text)
             path = str(test)
+            find_def = self.get_test_def(test_text)
 
             for tag in find:
                 tag_search = self.get_tag_and_type(tag)
@@ -88,8 +100,10 @@ class TestReport:
                           for i in tags]
             count_tags = self.count_tags_for_path(tags_names)
             tags_dict.update({"total_tags": len(tags),
+                              "total_defs": len(find_def),
                               "path": path, "tags": tags,
                               "tag_names": set(tags_names),
+                              "def_names": find_def,
                               "count_tags": count_tags,
                               "filename": test.name,
                               "filepath": str(test.parent)})
@@ -108,7 +122,7 @@ def report_tag(**kwargs):
     """Execute the report for files."""
 
     test_obj = TestReport(kwargs["project_path"])
-    test_tags = test_obj.get_tests_tags()
+    test_tags = test_obj.get_report()
 
     if kwargs["format"] == "json":
         with open("report.json", "w") as report:
