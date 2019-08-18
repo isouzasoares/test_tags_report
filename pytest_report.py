@@ -131,7 +131,7 @@ def report_tag(**kwargs):
     else:
         generate_report_html(**test_tags)
 
-    click.echo("Generate repor with success")
+    click.echo("Generate report with success")
 
 if __name__ == '__main__':
     report_tag()
