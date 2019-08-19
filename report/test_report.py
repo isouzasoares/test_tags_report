@@ -99,7 +99,7 @@ class TestReport:
             tags_dict.update({"total_tags": len(tags),
                               "total_defs": len(find_def),
                               "path": path, "tags": tags,
-                              "tag_names": set(tags_names),
+                              "tag_names": list(set(tags_names)),
                               "def_names": find_def,
                               "count_tags": count_tags,
                               "filename": test.name,
