@@ -3,30 +3,34 @@ import re
 from copy import deepcopy
 from pathlib import Path
 
-PYRAMID_TESTS = ("ut", "it")
+PYRAMID_TESTS = ("ut", "it", "component", "e2e", "manual")
 
 
 class TestReport:
 
-    def __init__(self, project_path):
+    def __init__(self, project_path, js=False):
         self.project_path = project_path
-        self.tests_paths = self.get_tests_files(self.project_path)
         self.pyramide_tests = {}
+        self.function_name_pattern = r"test_\w+" if not js else r"test_\w+"
+        self.function_pattern = r"def test_\w+" if not js else r" it\("
+        self.tag_pattern = r"\# \#test_\w+::\w+" \
+            if not js else r"(?:\s+ | *)/\/\ \#test_\w+::\w+"
+        self.test_files = '**/test_*.py' if not js else '**/*.spec.ts'
+        self.tests_paths = self.get_tests_files(self.project_path)
         [self.pyramide_tests.update({i: 0}) for i in PYRAMID_TESTS]
 
     def get_tests_files(self, project_path):
         project_path = Path(project_path)
-        return project_path.glob('**/test_*.py')
+        return project_path.glob(self.test_files)
 
     def get_tag_and_type(self, tag):
         tag_obj = {}
         name = type_tag = ""
-        tag_name = tag
+        tag_name = tag.lstrip()
         tag = tag.split("::")
 
         if tag:
-            pattern = r"test_\w+"
-            name = re.findall(pattern, tag[0])
+            name = re.findall(self.function_name_pattern, tag[0])
             name = name[0] if name else ""
 
             if len(tag) >= 2:
@@ -63,14 +67,12 @@ class TestReport:
 
     def get_test_tags(self, text):
 
-        pattern = r"\# \#test_\w+::\w{2}"
-        find = re.findall(pattern, text)
+        find = re.findall(self.tag_pattern, text)
         return find
 
     def get_test_def(self, text):
 
-        pattern = r"def test_\w+"
-        find = re.findall(pattern, text)
+        find = re.findall(self.function_pattern, text)
         return [i.replace("def ", "") for i in find]
 
     def get_report(self):

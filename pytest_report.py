@@ -9,10 +9,11 @@ from report.html import generate_report_html
 @click.option('-p', '--project_path', help='The project path of tests',
               required=True)
 @click.option('-f', '--format', default="html", help='The format of output')
+@click.option('-j', '--js', default=False, help='The js report', is_flag=True)
 def report_tag(**kwargs):
     """Execute the report for files."""
-
-    test_obj = TestReport(kwargs["project_path"])
+    
+    test_obj = TestReport(kwargs["project_path"], kwargs["js"])
     test_tags = test_obj.get_report()
 
     if kwargs["format"] == "json":
