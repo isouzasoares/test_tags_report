@@ -5,11 +5,11 @@ from pathlib import Path
 
 PYRAMID_TESTS = ("ut", "it", "component", "e2e", "manual")
 
-
 class TestReport:
 
-    def __init__(self, project_path, js=False):
+    def __init__(self, project_path, js=False, tags_for_diff=None):
         self.project_path = project_path
+        self.tags_for_diff = tags_for_diff
         self.pyramide_tests = {}
         self.function_name_pattern = r"test_\w+" if not js else r"test_\w+"
         self.function_pattern = r"def test_\w+" if not js else r" it\("
@@ -22,6 +22,13 @@ class TestReport:
     def get_tests_files(self, project_path):
         project_path = Path(project_path)
         return project_path.glob(self.test_files)
+    
+    def tags_diff(self, tag_names):
+        tags_names = set(tag_names)
+        tags_diff = set(
+            [i.replace("#", "").lstrip() for i in self.tags_for_diff])
+        return tags_diff - tags_names
+
 
     def get_tag_and_type(self, tag):
         tag_obj = {}
@@ -78,6 +85,7 @@ class TestReport:
     def get_report(self):
 
         tags_file = []
+        all_tags = []
         for test in self.tests_paths:
             tags = []
             tags_dict = deepcopy(self.pyramide_tests)
@@ -95,8 +103,12 @@ class TestReport:
                         break
 
                 tags.append(tag_search)
-            tags_names = [i.pop("original_name", "").replace("# #", "")
+            tags_names = [
+                    i.pop("original_name", "").replace("# #", "").\
+                        replace("// #", "").lstrip()
                           for i in tags]
+            all_tags += tags_names
+
             count_tags = self.count_tags_for_path(tags_names)
             tags_dict.update({"total_tags": len(tags),
                               "total_defs": len(find_def),
@@ -109,5 +121,7 @@ class TestReport:
             tags_file.append(tags_dict)
 
         report = self.consolidate_data(tags_file)
+        
+        report["tags_diff"] = list(self.tags_diff(all_tags))
 
         return {"details_paths": tags_file, "report": report}
