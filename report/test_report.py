@@ -33,7 +33,7 @@ class TestReport:
         return {"tags_not_found": list(tags_not_found),
                 "total_tags_not_found": len(tags_not_found),
                 "total_csv_tags": len(self.tags_for_diff),
-                "new_tags_found": new_tags_found,
+                "new_tags_found": list(new_tags_found),
                 "total_new_tags_found": len(new_tags_found)}
 
 
@@ -129,5 +129,5 @@ class TestReport:
 
         report = self.consolidate_data(tags_file)
         report.update(self.tags_diff(all_tags))
-        report["frontend"] = True if self.js else False
+        report["frontend"] = self.js
         return {"details_paths": tags_file, "report": report}
