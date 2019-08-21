@@ -13,10 +13,10 @@ with open('README.md', 'r') as fh:
 setup(
     name='tagsreport',
     version=__version__,
-    include_package_data=True,
     packages=find_packages(),
     author='icaro',
     author_email='icarosoares01@gmail.com',
+    include_package_data=True,
     entry_points={
         'console_scripts': [
             'tagsreport=report.cli:report_tag'
