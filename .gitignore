@@ -138,3 +138,5 @@ pylint-report.txt
 .scannerwork
 report.json
 report.html
+report_frontend.html
+report_backend.html

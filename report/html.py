@@ -6,5 +6,7 @@ def generate_report_html(**kwargs):
         loader=PackageLoader('report', 'templates'),
         autoescape=select_autoescape(['html', 'xml']))
     template = env.get_template('chart.html')
-    with open("report.html", 'w') as f:
+    name_file = "report_%s.html" % (
+        "frontend" if kwargs["report"]["frontend"] else "backend") 
+    with open(name_file, 'w') as f:
         f.write(template.render(**kwargs))

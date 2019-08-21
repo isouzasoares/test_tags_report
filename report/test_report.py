@@ -3,7 +3,7 @@ import re
 from copy import deepcopy
 from pathlib import Path
 
-PYRAMID_TESTS = ("ut", "it", "component", "e2e", "manual")
+PYRAMID_TESTS = ("ut", "it", "component")
 
 class TestReport:
 
@@ -11,6 +11,7 @@ class TestReport:
         self.project_path = project_path
         self.tags_for_diff = tags_for_diff
         self.pyramide_tests = {}
+        self.js = js
         self.function_name_pattern = r"test_\w+" if not js else r"test_\w+"
         self.function_pattern = r"def test_\w+" if not js else r" it\("
         self.tag_pattern = r"\# \#test_\w+::\w+" \
@@ -128,5 +129,5 @@ class TestReport:
 
         report = self.consolidate_data(tags_file)
         report.update(self.tags_diff(all_tags))
-
+        report["frontend"] = True if self.js else False
         return {"details_paths": tags_file, "report": report}
