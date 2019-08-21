@@ -27,7 +27,13 @@ class TestReport:
         tags_names = set(tag_names)
         tags_diff = set(
             [i.replace("#", "").lstrip() for i in self.tags_for_diff])
-        return tags_diff - tags_names
+        tags_not_found = tags_diff - tags_names
+        new_tags_found = tags_names - tags_diff
+        return {"tags_not_found": list(tags_not_found),
+                "total_tags_not_found": len(tags_not_found),
+                "total_csv_tags": len(self.tags_for_diff),
+                "new_tags_found": new_tags_found,
+                "total_new_tags_found": len(new_tags_found)}
 
 
     def get_tag_and_type(self, tag):
@@ -121,7 +127,6 @@ class TestReport:
             tags_file.append(tags_dict)
 
         report = self.consolidate_data(tags_file)
-        
-        report["tags_diff"] = list(self.tags_diff(all_tags))
+        report.update(self.tags_diff(all_tags))
 
         return {"details_paths": tags_file, "report": report}

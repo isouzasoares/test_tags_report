@@ -12,7 +12,6 @@
     <script type="text/javascript">
       google.charts.load("current", {packages:["corechart"]});
       google.charts.setOnLoadCallback(drawChart);
-      google.charts.setOnLoadCallback(columnchart);
       function drawChart() {
         var data = google.visualization.arrayToDataTable([['Task', 'Hours per Day'], {% for i in report.count_for_type %} {{ i | safe }}, {% endfor %}]);
 
@@ -25,24 +24,32 @@
         chart.draw(data, options);
       }
 
-      function columnchart() {
-          var data = google.visualization.arrayToDataTable([
-            ["Tests", "Total", { role: "style" } ],
-            ["Tests", {{ report.total_defs }}, "green"],
-            ["Tags", {{ report.total_tags }}, "silver"],
-          ]);
+      function columnchart(title, data, element_id) {
+          var data = google.visualization.arrayToDataTable(data);
 
              var options = {
-            title: "Tests vs Tags",
+            title: title,
             width: 600,
             height: 400,
             bar: {groupWidth: "95%"},
             legend: { position: "none" },
           };
           var view = new google.visualization.DataView(data);
-          var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+          var chart = new google.visualization.ColumnChart(document.getElementById(element_id));
           chart.draw(view, options);
     }
+    google.charts.setOnLoadCallback(function() { columnchart("Tests vs Tags", [
+            ["Tests", "Total", { role: "style" } ],
+            ["Tests", {{ report.total_defs }}, "green"],
+            ["Tags", {{ report.total_tags }}, "silver"],
+          ], "columnchart_values"); });
+    
+    google.charts.setOnLoadCallback(function() { columnchart("CSV Diff", [
+      ["Tests", "Total", { role: "style" } ],
+      ["Total csv tags", {{ report.total_csv_tags }}, "yellow"],
+      ["Total tags not found", {{ report.total_tags_not_found }}, "red"],
+      ["Total new tags found", {{ report.total_new_tags_found }}, "green"]
+    ], "tags_found"); });
     </script>
   </head>
 
@@ -74,28 +81,32 @@
   </head>
   <body>
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-      <h5 class="my-0 mr-md-auto font-weight-normal">Pytest Report</h5>
+      <h5 class="my-0 mr-md-auto font-weight-normal">Test tag report</h5>
     </div>
 
 
 <div class="container">
-  <div class="d-flex justify-content-center">
-       <div id="piechart_3d" style="width: 900px; height: 500px;"></div>
-       <div id="columnchart_values" style="width: 900px; height: 300px;"></div>
+  <div class="row">
+       <div class="col-md-6" ><div style="width: 900px; height: 300px;" id="columnchart_values"></div></div>
+       <div class="col-md-6" ><div style="width: 500; height: 400px;" id="piechart_3d"></div></div>
  </div>
+ <div class="row">
+    <div class="col-md-6" ><div style="width: 500; height: 400px;" id="tags_found"></div></div>
+  
+</div>
+ {% if report.tags_not_found %}
  <div class="d-flex justify-content-center">
   <table class="table table-striped">
-    <caption>Report details</caption>
+    <caption>Tags not found</caption>
     <thead>
       <tr>
         <th scope="col">#</th>
-        <th scope="col">Tags not found</th>
+        <th scope="col">Name</th>
         
       </tr>
     </thead>
     <tbody>
-
-      {% for tag in report.tags_diff %}
+      {% for tag in report.tags_not_found %}
         <tr>
           <th scope="row">{{ loop.index }}</th>
           <td>{{ tag }}</td>
@@ -104,6 +115,30 @@
     </tbody>
  </table>
 </div>
+{% endif %}
+
+{% if report.new_tags_found %}
+<div class="d-flex justify-content-center">
+ <table class="table table-striped">
+   <caption>Tags new tags found</caption>
+   <thead>
+     <tr>
+       <th scope="col">#</th>
+       <th scope="col">Name</th>
+       
+     </tr>
+   </thead>
+   <tbody>
+     {% for tag in report.new_tags_found %}
+       <tr>
+         <th scope="row">{{ loop.index }}</th>
+         <td>{{ tag }}</td>
+       </tr>
+     {% endfor %}
+   </tbody>
+</table>
+</div>
+{% endif %}
  <div class="d-flex justify-content-center">
      <table class="table table-striped">
         <caption>Report details</caption>
