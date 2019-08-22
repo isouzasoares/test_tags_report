@@ -2,7 +2,7 @@ from pytest import fixture
 
 from pathlib import Path
 
-from tags_report.report.tags_report import TagsReport
+from report.tags_report import TagsReport
 
 DETAIL_PATH_BACKEND = [{
     "total_tags": 2,

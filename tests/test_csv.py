@@ -1,5 +1,5 @@
 
-from tags_report.report.csv import read_csv_column
+from report.csv import read_csv_column
 
 def test_csv_column_tag():
     with open("tests/examples/csv/tags.csv", "r") as csv:
