@@ -1,8 +1,10 @@
 # Tests tags report
 
+
+[![Build Status](https://travis-ci.org/isouzasoares/test_tags_report.svg?branch=master)](https://travis-ci.org/isouzasoares/test_tags_report)
+
 ### Requirements
 - Python 3+
-
 
 ### Installing
 Install and update using pip:
