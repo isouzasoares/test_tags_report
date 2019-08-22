@@ -1,7 +1,7 @@
 import json
 import click
 
-from report.report import TagsReport
+from report.tags_report import TagsReport
 from report.html import generate_report_html
 from report.csv import read_csv_column
 
