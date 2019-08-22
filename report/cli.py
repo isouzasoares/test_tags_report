@@ -7,17 +7,34 @@ from report.csv import read_csv_column
 
 
 @click.command()
-@click.option("-p", "--project_path", 
-              help="The project path where containing the tests",
-              required=True)
-@click.option("-f", "--format", default="html",
-              help="The format of output (.json or .html, .html is default)")
-@click.option("-js", "--js", default=False,
-              help="If placed the command will validate the tag in \n \
+@click.option(
+    "-p",
+    "--project_path",
+    help="The project path where containing the tests",
+    required=True,
+)
+@click.option(
+    "-f",
+    "--format",
+    default="html",
+    help="The format of output (.json or .html, .html is default)",
+)
+@click.option(
+    "-js",
+    "--js",
+    default=False,
+    help="If placed the command will validate the tag in \n \
               files extensions .spec.ts else validate in test_*.py",
-              is_flag=True)
-@click.option("-c", "--csv", help="The csv with tags column for the comparator")
-@click.option("-cc", "--csv_column", help="The tags column name in the csv")
+    is_flag=True,
+)
+@click.option(
+    "-c",
+    "--csv",
+    help="The csv with tags column for the comparator")
+@click.option(
+    "-cc",
+    "--csv_column",
+    help="The tags column name in the csv")
 def report_tag(**kwargs):
     """Search tags in the tests code and generate reports."""
     csv_tags = []
@@ -30,7 +47,7 @@ def report_tag(**kwargs):
 
     test_obj = TestReport(kwargs["project_path"], kwargs["js"], csv_tags)
     test_tags = test_obj.get_report()
-    
+
     if kwargs["format"] == "json":
         with open("report.json", "w") as report:
             report.write(json.dumps(test_tags))
@@ -39,5 +56,6 @@ def report_tag(**kwargs):
 
     click.echo("Successfully generated report")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     report_tag()

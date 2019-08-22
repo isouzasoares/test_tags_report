@@ -13,8 +13,6 @@ pip install git+https://github.com/isouzasoares/test_tags_report.git
 
 # Tests
 
-### Running all unit tests
-
 
 ### Usage
 Accessing the help:

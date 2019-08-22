@@ -5,10 +5,9 @@ from pathlib import Path
 
 PYRAMID_TESTS = ("ut", "it", "component")
 
+
 class TestReport:
-    """
-    Create the obj of test report.
-    """
+    """Create the obj of test report."""
 
     def __init__(self, project_path, js=False, tags_for_diff=None):
         """
@@ -27,9 +26,11 @@ class TestReport:
         self.js = js
         self.function_name_pattern = r"test_\w+" if not js else r"test_\w+"
         self.function_pattern = r"def test_\w+" if not js else r" it\("
-        self.tag_pattern = r"\# \#test_\w+::\w+" \
+        self.tag_pattern = (
+            r"\# \#test_\w+::\w+"
             if not js else r"(?:\s+ | *)/\/\ \#test_\w+::\w+"
-        self.test_files = '**/test_*.py' if not js else '**/*.spec.ts'
+        )
+        self.test_files = "**/test_*.py" if not js else "**/*.spec.ts"
         self.tests_paths = self.get_tests_files(self.project_path)
         [self.pyramide_tests.update({i: 0}) for i in PYRAMID_TESTS]
 
@@ -45,12 +46,12 @@ class TestReport:
 
         project_path = Path(project_path)
         return project_path.glob(self.test_files)
-    
+
     def tags_diff(self, tag_names):
         """
         Responsible for Compare if tags found in tag names list
-        :param tag_names: The list of tag_names for the compare 
-         with test files tags 
+        :param tag_names: The list of tag_names for the compare
+         with test files tags
         :type tag_names: list
 
         :returns: Total of tags found
@@ -58,16 +59,17 @@ class TestReport:
         """
 
         tags_names = set(tag_names)
-        tags_diff = set(
-            [i.replace("#", "").lstrip() for i in self.tags_for_diff])
+        tags_diff = set([i.replace("#", "").lstrip()
+                         for i in self.tags_for_diff])
         tags_not_found = tags_diff - tags_names
         new_tags_found = tags_names - tags_diff
-        return {"tags_not_found": list(tags_not_found),
-                "total_tags_not_found": len(tags_not_found),
-                "total_csv_tags": len(self.tags_for_diff),
-                "new_tags_found": list(new_tags_found),
-                "total_new_tags_found": len(new_tags_found)}
-
+        return {
+            "tags_not_found": list(tags_not_found),
+            "total_tags_not_found": len(tags_not_found),
+            "total_csv_tags": len(self.tags_for_diff),
+            "new_tags_found": list(new_tags_found),
+            "total_new_tags_found": len(new_tags_found),
+        }
 
     def get_tag_and_type(self, tag):
         """
@@ -191,20 +193,28 @@ class TestReport:
 
                 tags.append(tag_search)
             tags_names = [
-                    i.pop("original_name", "").replace("# #", "").\
-                        replace("// #", "").lstrip()
-                          for i in tags]
+                i.pop("original_name", "")
+                .replace("# #", "")
+                .replace("// #", "")
+                .lstrip()
+                for i in tags
+            ]
             all_tags += tags_names
 
             count_tags = self.count_tags_for_path(tags_names)
-            tags_dict.update({"total_tags": len(tags),
-                              "total_defs": len(find_def),
-                              "path": path, "tags": tags,
-                              "tag_names": list(set(tags_names)),
-                              "def_names": find_def,
-                              "count_tags": count_tags,
-                              "filename": test.name,
-                              "filepath": str(test.parent)})
+            tags_dict.update(
+                {
+                    "total_tags": len(tags),
+                    "total_defs": len(find_def),
+                    "path": path,
+                    "tags": tags,
+                    "tag_names": list(set(tags_names)),
+                    "def_names": find_def,
+                    "count_tags": count_tags,
+                    "filename": test.name,
+                    "filepath": str(test.parent),
+                }
+            )
             tags_file.append(tags_dict)
 
         report = self.consolidate_data(tags_file)
