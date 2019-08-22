@@ -7,14 +7,19 @@ from report.csv import read_csv_column
 
 
 @click.command()
-@click.option("-p", "--project_path", help="The project path of tests",
+@click.option("-p", "--project_path", 
+              help="The project path where containing the tests",
               required=True)
-@click.option("-f", "--format", default="html", help="The format of output")
-@click.option("-js", "--js", default=False, help="The js report", is_flag=True)
-@click.option("-c", "--csv", help="The csv with tags to the comparator")
-@click.option("-cc", "--csv_column", help="The csv tags column name")
+@click.option("-f", "--format", default="html",
+              help="The format of output (.json or .html, .html is default)")
+@click.option("-js", "--js", default=False,
+              help="If placed the command will validate the tag in \n \
+              files extensions .spec.ts else validate in test_*.py",
+              is_flag=True)
+@click.option("-c", "--csv", help="The csv with tags column for the comparator")
+@click.option("-cc", "--csv_column", help="The tags column name in the csv")
 def report_tag(**kwargs):
-    """Execute the report for files."""
+    """Search tags in the tests code and generate reports."""
     csv_tags = []
 
     if kwargs["csv"] is not None:
@@ -32,7 +37,7 @@ def report_tag(**kwargs):
     else:
         generate_report_html(**test_tags)
 
-    click.echo("Generate report with success")
+    click.echo("Successfully generated report")
 
 if __name__ == '__main__':
     report_tag()
