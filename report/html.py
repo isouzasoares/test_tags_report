@@ -2,6 +2,12 @@ from jinja2 import Environment, PackageLoader, select_autoescape
 
 
 def generate_report_html(**kwargs):
+    """
+    Responsible to the write html report
+    :param '**kwargs': The keyword arguments are used for the all report 
+     variables
+    :type 'kwargs': dict
+    """
     env = Environment(
         loader=PackageLoader('report', 'templates'),
         autoescape=select_autoescape(['html', 'xml']))

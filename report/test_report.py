@@ -6,8 +6,21 @@ from pathlib import Path
 PYRAMID_TESTS = ("ut", "it", "component")
 
 class TestReport:
+    """
+    Create the obj of test report.
+    """
 
     def __init__(self, project_path, js=False, tags_for_diff=None):
+        """
+        Set class atributtes
+        :param project_path: The application path for the generate report
+        :type projetc_path: str
+        :param js: if True the code validates files .spec.ts else test_*.py
+        :type js: bool
+        :param tags_for_diff: Tags for the compare to the code tags searching
+        :type tags_for_diff: list
+        """
+
         self.project_path = project_path
         self.tags_for_diff = tags_for_diff
         self.pyramide_tests = {}
@@ -21,10 +34,29 @@ class TestReport:
         [self.pyramide_tests.update({i: 0}) for i in PYRAMID_TESTS]
 
     def get_tests_files(self, project_path):
+        """
+        Searching the tests files
+        :param project_path: The application path for the test files searching
+        :type projetc_path: str
+
+        :returns: The python Path object
+        :rtype: Path
+        """
+
         project_path = Path(project_path)
         return project_path.glob(self.test_files)
     
     def tags_diff(self, tag_names):
+        """
+        Responsible for Compare if tags found in tag names list
+        :param tag_names: The list of tag_names for the compare 
+         with test files tags 
+        :type tag_names: list
+
+        :returns: Total of tags found
+        :rtype: dict
+        """
+
         tags_names = set(tag_names)
         tags_diff = set(
             [i.replace("#", "").lstrip() for i in self.tags_for_diff])
@@ -38,6 +70,15 @@ class TestReport:
 
 
     def get_tag_and_type(self, tag):
+        """
+        Responsible split the tag name and tag type
+        :param tag: The tag name with type separated per ::
+        :type tag: str
+
+        :returns: Tags names and type
+        :rtype: dict
+        """
+
         tag_obj = {}
         name = type_tag = ""
         tag_name = tag.lstrip()
@@ -56,6 +97,15 @@ class TestReport:
         return tag_obj
 
     def count_tags_for_path(self, tag_names):
+        """
+        Responsible to the count tag by name
+        :param tag_names: The tag names list
+        :type tag_names: list
+
+        :returns: Tags name and total
+        :rtype: dict
+        """
+
         count = {}
         for tag in tag_names:
             if not count.get(tag, None):
@@ -65,6 +115,14 @@ class TestReport:
         return [{"name": key, "count": value} for key, value in count.items()]
 
     def consolidate_data(self, path_data):
+        """
+        Responsible to the count all tags by name
+        :param path_data: The test files data with total_def and total_tags
+        :type path_data: list
+
+        :returns: Total tags and total of tests functions
+        :rtype: dict
+        """
 
         total_tags = total_defs = 0
         count_type = deepcopy(self.pyramide_tests)
@@ -80,16 +138,38 @@ class TestReport:
         return report
 
     def get_test_tags(self, text):
+        """
+        Responsible to the searching all tags in the text
+        :param text: The text to find
+        :type text: str
+
+        :returns: All tags found
+        :rtype: list
+        """
 
         find = re.findall(self.tag_pattern, text)
         return find
 
     def get_test_def(self, text):
+        """
+        Responsible to the searching all functions in the text
+        :param text: The text to find
+        :type text: str
+
+        :returns: All functions found
+        :rtype: list
+        """
 
         find = re.findall(self.function_pattern, text)
         return [i.replace("def ", "") for i in find]
 
     def get_report(self):
+        """
+        Create the tags report
+
+        :returns: Report detail
+        :rtype: list
+        """
 
         tags_file = []
         all_tags = []
