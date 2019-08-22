@@ -9,7 +9,7 @@ PYRAMID_TESTS = ("ut", "it", "component")
 class TestReport:
     """Create the obj of test report."""
 
-    def __init__(self, project_path, js=False, tags_for_diff=None):
+    def __init__(self, project_path, js=False, tags_for_diff=[]):
         """
         Set class atributtes
         :param project_path: The application path for the generate report

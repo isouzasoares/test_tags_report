@@ -42,11 +42,17 @@ def report_tag(**kwargs):
     if kwargs["csv"] is not None:
         if kwargs["csv_column"] is not None:
             with open(kwargs["csv"], "r") as csv:
-                csv_tags = read_csv_column(csv, kwargs["csv_column"],
-                                           kwargs["js"])
+                try:
+                    csv_tags = read_csv_column(csv, kwargs["csv_column"],
+                                               kwargs["js"])
+                except:
+                    raise click.ClickException("Error on read csv")
 
     test_obj = TestReport(kwargs["project_path"], kwargs["js"], csv_tags)
     test_tags = test_obj.get_report()
+
+    if not test_tags["details_paths"]:
+        raise click.ClickException("Tests files not found")
 
     if kwargs["format"] == "json":
         with open("report.json", "w") as report:
