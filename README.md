@@ -48,7 +48,8 @@ report_backend.html
 Usage example with csv comparator:
 ```sh
 $ tagsreport -p test/ -c ../../Downloads/test.csv  -cc 'Tags_names'
-Successfully generated reportessfully generated report
+Successfully generated report
+
 ```
 
 
