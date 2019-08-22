@@ -6,7 +6,7 @@ from pathlib import Path
 PYRAMID_TESTS = ("ut", "it", "component")
 
 
-class TestReport:
+class TagsReport:
     """Create the obj of test report."""
 
     def __init__(self, project_path, js=False, tags_for_diff=[]):

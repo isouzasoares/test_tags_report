@@ -2,7 +2,7 @@ from pytest import fixture
 
 from pathlib import Path
 
-from report.test_report import TestReport
+from report.report import TagsReport
 
 DETAIL_PATH_BACKEND = [{
     "total_tags": 2,
@@ -42,12 +42,12 @@ DETAIL_PATH_BACKEND = [{
 
 @fixture(autouse=True)
 def backend_instance():
-    test_report = TestReport("tests/examples/")
+    test_report = TagsReport("tests/examples/")
     return test_report
 
 @fixture(autouse=True)
 def frontend_instance():
-    test_report = TestReport("tests/examples/", True)
+    test_report = TagsReport("tests/examples/", True)
     return test_report
 
 def test_type_regex_backend(backend_instance):

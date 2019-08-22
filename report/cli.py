@@ -1,7 +1,7 @@
 import json
 import click
 
-from report.test_report import TestReport
+from report.report import TagsReport
 from report.html import generate_report_html
 from report.csv import read_csv_column
 
@@ -48,7 +48,7 @@ def report_tag(**kwargs):
                 except:
                     raise click.ClickException("Error on read csv")
 
-    test_obj = TestReport(kwargs["project_path"], kwargs["js"], csv_tags)
+    test_obj = TagsReport(kwargs["project_path"], kwargs["js"], csv_tags)
     test_tags = test_obj.get_report()
 
     if not test_tags["details_paths"]:
