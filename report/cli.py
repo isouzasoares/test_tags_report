@@ -24,7 +24,7 @@ from report.csv import read_csv_column
     "--ts",
     default=False,
     help="If placed the command will validate the tag in \n \
-              files extensions .spec.ts else validate in test_*.py",
+            files extensions .spec.ts else validate in test_*.py",
     is_flag=True,
 )
 @click.option(
@@ -46,7 +46,7 @@ def report_tag(**kwargs):
 
                     csv_tags = read_csv_column(csv, kwargs["csv_column"],
                                                kwargs["ts"])
-            except:
+            except Exception:
                 raise click.ClickException("Error on read csv")
 
     test_obj = TagsReport(kwargs["project_path"], kwargs["ts"], csv_tags)
@@ -64,5 +64,5 @@ def report_tag(**kwargs):
     click.echo("Successfully generated report")
 
 
-if __name__ == "__main__": # pragma: no cover
+if __name__ == "__main__":  # pragma: no cover
     report_tag()
