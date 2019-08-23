@@ -13,7 +13,7 @@ def test_csv_column_tag_backend():
 
 def test_csv_column_tag_front():
     with open("tests/examples/csv/tags_front_back.csv", "r") as csv:
-        tags = read_csv_column(csv, "tags", js=True)
+        tags = read_csv_column(csv, "tags", ts=True)
         assert tags == ["#tag_1:ut"]
 
 #def test_csv_column_tag_not_tag():

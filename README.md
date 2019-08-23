@@ -29,7 +29,7 @@ Options:
                            [required]
   -f, --format TEXT        The format of output (.json or .html, .html is
                            default)
-  -js, --js                If placed the command will validate the tag in
+  -ts, --ts                If placed the command will validate the tag in
                            files extensions .spec.ts else validate in
                            test_*.py
   -c, --csv TEXT           The csv with tags column for the comparator

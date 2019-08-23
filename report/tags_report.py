@@ -9,13 +9,13 @@ PYRAMID_TESTS = ("ut", "it", "component")
 class TagsReport:
     """Create the obj of test report."""
 
-    def __init__(self, project_path, js=False, tags_for_diff=[]):
+    def __init__(self, project_path, ts=False, tags_for_diff=[]):
         """
         Set class atributtes
         :param project_path: The application path for the generate report
         :type projetc_path: str
-        :param js: if True the code validates files .spec.ts else test_*.py
-        :type js: bool
+        :param ts: if True the code validates files .spec.ts else test_*.py
+        :type ts: bool
         :param tags_for_diff: Tags for the compare to the code tags searching
         :type tags_for_diff: list
         """
@@ -23,14 +23,14 @@ class TagsReport:
         self.project_path = project_path
         self.tags_for_diff = tags_for_diff
         self.pyramide_tests = {}
-        self.js = js
-        self.function_name_pattern = r"test_\w+" if not js else r"test_\w+"
-        self.function_pattern = r"def test_\w+" if not js else r" it\("
+        self.ts = ts
+        self.function_name_pattern = r"test_\w+" if not ts else r"test_\w+"
+        self.function_pattern = r"def test_\w+" if not ts else r" it\("
         self.tag_pattern = (
             r"\# \#test_\w+::\w+"
-            if not js else r"(?:\s+ | *)/\/\ \#test_\w+::\w+"
+            if not ts else r"(?:\s+ | *)/\/\ \#test_\w+::\w+"
         )
-        self.test_files = "**/test_*.py" if not js else "**/*.spec.ts"
+        self.test_files = "**/test_*.py" if not ts else "**/*.spec.ts"
         self.tests_paths = self.get_tests_files(self.project_path)
         [self.pyramide_tests.update({i: 0}) for i in PYRAMID_TESTS]
 
@@ -219,5 +219,5 @@ class TagsReport:
 
         report = self.consolidate_data(tags_file)
         report.update(self.tags_diff(all_tags))
-        report["frontend"] = self.js
+        report["frontend"] = self.ts
         return {"details_paths": tags_file, "report": report}

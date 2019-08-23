@@ -20,8 +20,8 @@ from report.csv import read_csv_column
     help="The format of output (.json or .html, .html is default)",
 )
 @click.option(
-    "-js",
-    "--js",
+    "-ts",
+    "--ts",
     default=False,
     help="If placed the command will validate the tag in \n \
               files extensions .spec.ts else validate in test_*.py",
@@ -44,11 +44,11 @@ def report_tag(**kwargs):
             with open(kwargs["csv"], "r") as csv:
                 try:
                     csv_tags = read_csv_column(csv, kwargs["csv_column"],
-                                               kwargs["js"])
+                                               kwargs["ts"])
                 except:
                     raise click.ClickException("Error on read csv")
 
-    test_obj = TagsReport(kwargs["project_path"], kwargs["js"], csv_tags)
+    test_obj = TagsReport(kwargs["project_path"], kwargs["ts"], csv_tags)
     test_tags = test_obj.get_report()
 
     if not test_tags["details_paths"]:
