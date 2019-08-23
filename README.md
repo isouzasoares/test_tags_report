@@ -1,5 +1,27 @@
 # Tests tags report
 
+Tags report is a Tool which makes it easy to report tags inserted in your code's test files.
+
+# Tags examples
+
+For test_*.py files:
+
+```python
+# #test_example_2_2::it
+def test_example_2_2():
+    pass
+```
+
+For *.spec.ts files:
+
+```javascript
+  // #test_validate_example_2::ut
+  it('example_1', () => {});
+```
+
+The tool will collect all inserted tags and generate a detailed report.
+
+
 
 [![Build Status](https://travis-ci.org/isouzasoares/test_tags_report.svg?branch=master)](https://travis-ci.org/isouzasoares/test_tags_report)
 
@@ -15,6 +37,9 @@ pip install git+https://github.com/isouzasoares/test_tags_report.git
 
 # Tests
 
+```sh
+$ pytest tests/
+``` 
 
 ### Usage
 Accessing the help:
