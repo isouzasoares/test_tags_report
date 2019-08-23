@@ -18,8 +18,9 @@ def read_csv_column(csv_file, column_name, ts=False):
     reader = csv.DictReader(csv_file)
     csv_tags = []
     for row in reader:
+        row_column = row[column_name]
         if "FRONT" in row.keys() or "BACK" in row.keys():
-            if row.get(column_name, None) and (
+            if row_column and (
                 ts and row.get("FRONT", None) or not ts and row.get("BACK",
                                                                     None)
             ):
