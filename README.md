@@ -1,5 +1,7 @@
 # Tests tags report
 
+[![Build Status](https://travis-ci.org/isouzasoares/test_tags_report.svg?branch=master)](https://travis-ci.org/isouzasoares/test_tags_report)
+
 Tags report is a Tool which makes it easy to report tags inserted in your code's test files.
 
 # Tags examples
@@ -21,9 +23,6 @@ For *.spec.ts files:
 
 The tool will collect all inserted tags and generate a detailed report.
 
-
-
-[![Build Status](https://travis-ci.org/isouzasoares/test_tags_report.svg?branch=master)](https://travis-ci.org/isouzasoares/test_tags_report)
 
 ### Requirements
 - Python 3+
